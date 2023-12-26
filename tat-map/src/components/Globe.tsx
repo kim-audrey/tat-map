@@ -1,16 +1,15 @@
 // src/components/Globe.tsx
 import React from 'react';
 import Globe from 'react-globe.gl';
-import { Artist } from '../shared/interfaces'; // Adjust the import path as necessary
+import { Artist, Point } from '../shared/interfaces'; // Adjust the import path as necessary
 
 
 interface MyGlobeProps {
     artists: Artist[];
+    onPointClick: (artist: Artist) => void;
 }
 
-const MyGlobe: React.FC<MyGlobeProps> = ({ artists }) => {
-
-  console.log("Artists Data:", artists); // Debug: Log the artists data
+const MyGlobe: React.FC<MyGlobeProps> = ({ artists, onPointClick }) => {
 
   const points = artists.map(artist => ({
     lat: artist.location.lat,
@@ -18,16 +17,9 @@ const MyGlobe: React.FC<MyGlobeProps> = ({ artists }) => {
     color: 'red',
     altitude: .1,
     radius: .5,
+    artist: artist
   }));
 
-  console.log("Points Data:", points); // Debug: Log the points data
-
-
-//   const onPointClick = (point) => {
-//     if (point.artist) {
-//         onArtistSelect(point.artist);
-//     }
-//   }
 
     return (
     <Globe
@@ -38,7 +30,9 @@ const MyGlobe: React.FC<MyGlobeProps> = ({ artists }) => {
       pointColor={() => 'red'}
       pointAltitude="altitude" // Use the 'altitude' property from the points data
       pointRadius="radius"
-    //   onPointClick={onPointClick}
+      onPointClick={(point: Point) => {
+        onPointClick(point.artist);
+      }}
     />
   );
 };
